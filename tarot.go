@@ -3,10 +3,18 @@ package main
 import (
 	"fmt"
 	"time"
+	"os"
 	"math/rand"
 )
 
 func main() {
+
+	argsWithProg := os.Args
+	argsWithoutProg := os.Args[1:]
+	arg := os.Args[3]
+ 	fmt.Println(argsWithProg)	
+ 	fmt.Println(argsWithoutProg)	
+ 	fmt.Println(arg)	
 
 
 	riderDeck := make(map[int]string)
@@ -177,11 +185,15 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	list = rand.Perm(i)
 
+
 	for i := 0; i < 78; i++ {
 		list[i] = list[i] + 1
+	if arg=="reverse" {
+
 		if 	(rand.Intn(3 - 1)) == 1 {
 			list[i] = list[i]  * 100
 		}
+}
 
 	}
 
