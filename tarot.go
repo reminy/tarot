@@ -5,16 +5,29 @@ import (
 	"time"
 	"os"
 	"math/rand"
+	"flag"
 )
 
 func main() {
 
 	argsWithProg := os.Args
 	argsWithoutProg := os.Args[1:]
-	arg := os.Args[3]
+
+
  	fmt.Println(argsWithProg)	
- 	fmt.Println(argsWithoutProg)	
- 	fmt.Println(arg)	
+ 	fmt.Println(argsWithoutProg) 	
+
+	wordPtr := flag.String("Deck", "Rider", "a string") 
+	spreadPtr := flag.String("Spread", "CelticCross", "a string") 
+	boolPtr := flag.Bool("reverse", false, "a bool")
+
+	flag.Parse()
+
+	fmt.Println("Deck: ", *wordPtr)
+	fmt.Println("Spread: ", *spreadPtr)
+	fmt.Println("Reverse: ", *boolPtr)
+
+	if *wordPtr=="Rider" {
 
 
 	riderDeck := make(map[int]string)
@@ -188,7 +201,7 @@ func main() {
 
 	for i := 0; i < 78; i++ {
 		list[i] = list[i] + 1
-	if arg=="reverse" {
+	if *boolPtr  {
 
 		if 	(rand.Intn(3 - 1)) == 1 {
 			list[i] = list[i]  * 100
@@ -198,9 +211,6 @@ func main() {
 	}
 
 
-//	for i:=0 ; i < 78 ;  i++ {
-//		fmt.Println(riderDeck[i+1])
-//	}
 	for i:=0 ; i < 78 ; i++  {
 		var j int
 	        j = list[i]
@@ -208,5 +218,6 @@ func main() {
 		fmt.Println(j)
 		fmt.Println(riderDeck[j])
 	}
+}
 
 }
