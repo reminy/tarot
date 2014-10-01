@@ -4,17 +4,20 @@ import (
 	"flag"
 	"fmt"
 	"time"
-	//"os"
 	"math/rand"
 )
 
+func getDeckSize(s string) int  {
+	switch s {
+		case "Rider", "shadow" :
+			return 78
+		case "Wildwood" :
+			return 78
+		}
+	return 0
+}
+
 func main() {
-
-	//argsWithProg := os.Args
-	//argsWithoutProg := os.Args[1:]
-
-	//fmt.Println(argsWithProg)	
-	//fmt.Println(argsWithoutProg) 	
 
 	deckPtr := flag.String("deck", "Rider", "a string")
 	spreadPtr := flag.String("spread", "CelticCross", "a string")
@@ -23,15 +26,15 @@ func main() {
 
 	flag.Parse()
 
+	fmt.Println()
 	fmt.Println("Deck: ", *deckPtr)
 	fmt.Println("Spread: ", *spreadPtr)
 	fmt.Println("Reverse: ", *reversePtr)
-	//fmt.Println("Shuffle: ", *shufflePtr)
-	//fmt.Println("Number of Args: ", flag.NArg())
+//	fmt.Println("Shuffle: ", *shufflePtr)
 
-	riderDeck := make(map[int]string)
+	tarotDeck := make(map[int]string)
 	if *deckPtr == "shadow" || *deckPtr == "Rider" {
-		riderDeck = map[int]string{
+		tarotDeck = map[int]string{
 
 			1:    "The Fool ",
 			100:  "The Fool, Reversed ",
@@ -193,14 +196,14 @@ func main() {
 			7700: "Queen of Swords, Reversed ",
 			78:   "King of Swords ",
 			7800: "King of Swords, Reversed ",
-		}
+}
+		} else {
 
-	}
 
-	wildwoodDeck := make(map[int]string)
-	if *deckPtr == "wildwood" {
 
-		wildwoodDeck = map[int]string{
+	if *deckPtr == "Wildwood" {
+
+		tarotDeck = map[int]string{
 			1:    "The Wanderer ",
 			100:  "The Wanderer, Reversed ",
 			2:    "The Shaman ",
@@ -364,37 +367,34 @@ func main() {
 		}
 
 	}
-	// put the variable int for each deck here
-	// and do deck cases
 
-	var i int = 78
+}
+	
+	var deckSize = getDeckSize(*deckPtr)
+//	fmt.Println("getDeckSize", deckSize)
+	fmt.Println()
 
-	switch *deckPtr {
-	case "Rider", "shadow":
-		//i := 78
-		//fmt.Println("Deck: ", *deckPtr)
-		//fmt.Println(i)
-		fmt.Println()
-	case "wildwood":
-		//i := 78
-		//fmt.Println("Deck: ", *deckPtr)
-		//fmt.Println(i)
-		fmt.Println()
-	}
+
+
+// This following code gets and array of 0-decksize random
+//integers, adds 1 to each to change the range to
+// 1-decksize, then for each int, randomly multiplies by
+// 100 or not. The int is then used to index as a
+// key into the appropriate map
 
 	var list []int
 	rand.Seed(time.Now().UTC().UnixNano())
-	list = rand.Perm(i)
+	list = rand.Perm(deckSize)
 
-	for i := 0; i < 78; i++ {
+	var i = 0
+	for  i = 0; i < deckSize ; i++ {
 		list[i] = list[i] + 1
 		if *reversePtr {
 
 			if (rand.Intn(3 - 1)) == 1 {
 				list[i] = list[i] * 100
 			}
-			//add some logic to use the number of cards
-			//in deck
+
 			//add some deck cut logic and some keep ptr
 			//to dealt point
 			//so no new deal until cards gone.  Not
@@ -413,23 +413,84 @@ func main() {
 	var spreadCount = 10
 	
 	switch *spreadPtr {
-		case "five" :
+		case "FiveCard" :
 			spreadCount = 5
+		case "Relationship" :
+			spreadCount = 10
+		case "CelticCross" :
+			spreadCount = 10
+		case "Daily" :
+			spreadCount = 1
+		case "Zodiac" :
+			spreadCount = deckSize
 		case "ellipse" :
 			spreadCount = 7
-		case "mirror", "mandala" :
+		case "Mirror" :
+			spreadCount = 8
+		case "mandala" :
 			spreadCount = 8
 		}
 
-	for i := 0; i < spreadCount; i++ {
+
+
+
+	spreadMeaning := make(map[int]string)
+
+	if *spreadPtr == "FiveCard"  {
+		spreadMeaning = map[int]string{
+			1:   "Past influence - how did I get here?",
+			2:   "Recent past - coulda, woulda, shoulda...",
+			3:   "Present situation - what are today's options?",
+			4:   "Near future - likely outcomes",
+			5:   "Future - changing outcomes",
+		}
+	} 
+
+	if *spreadPtr == "Daily" {
+		spreadMeaning = map[int]string {
+			1:    "The querant's path for today",
+		}
+	}
+
+	if *spreadPtr == "Mirror" {
+		spreadMeaning = map[int]string {
+			1:   "The querant and the query",
+			2:   "How querant views the other",
+			3:   "How the parties view themselves",
+			4:   "How the other fulfills the querant",
+			5:   "How the other views the querant",
+			6:   "Negative flows in the relationship",
+			7:   "Positive flows in the relationship",
+			8:   "Synergistic outcome",
+		}
+	}
+
+	if  *spreadPtr == "Relationship" {
+
+		spreadMeaning = map[int]string {
+			1:   "The querant and the query",
+			2:   "How querant views the other",
+			3:   "How the parties view themselves",
+			4:   "How the other fulfills the querant",
+			5:   "How the other views the querant",
+			6:   "Negative flows in the relationship",
+			7:   "Positive flows in the relationship",
+			8:   "Synergistic outcome",
+			9:   "Desired outcome querant",
+			10:  "Desired outcome other",
+
+		}
+	}
+	
+	for  i := 0; i < spreadCount; i++ {
 		var j int
 		j = list[i]
 
 		fmt.Print(i + 1)
 		fmt.Print(": ")
-		fmt.Println(riderDeck[j])
-		fmt.Println(wildwoodDeck[j])
+		fmt.Println(spreadMeaning[i+1])
+		fmt.Println(tarotDeck[j])
+		fmt.Println()
+
 	}
-
 }
-
