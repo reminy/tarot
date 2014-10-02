@@ -9,7 +9,7 @@ import (
 
 func getDeckSize(s string) int  {
 	switch s {
-		case "Rider", "shadow" :
+		case "Rider", "Shadow" :
 			return 78
 		case "Wildwood" :
 			return 78
@@ -19,10 +19,10 @@ func getDeckSize(s string) int  {
 
 func main() {
 
-	deckPtr := flag.String("deck", "Rider", "a string")
-	spreadPtr := flag.String("spread", "CelticCross", "a string")
-	reversePtr := flag.Bool("reverse", true, "a bool")
-	//shufflePtr := flag.Bool("shuffle", true, "a bool")
+	deckPtr := flag.String("deck", "Rider", "[Wildwood|Shadow|Rider]")
+	spreadPtr := flag.String("spread", "CelticCross", "[FiveCard|Relationship|Mirror|Mandala|Daily|CelticCross|Ellipse|Zodiac]")
+	reversePtr := flag.Bool("reverse", true, "[false|true]")
+	shufflePtr := flag.Bool("shuffle", true, "[false|true] Note: false currently disabled")
 
 	flag.Parse()
 
@@ -30,10 +30,10 @@ func main() {
 	fmt.Println("Deck: ", *deckPtr)
 	fmt.Println("Spread: ", *spreadPtr)
 	fmt.Println("Reverse: ", *reversePtr)
-//	fmt.Println("Shuffle: ", *shufflePtr)
+	fmt.Println("Shuffle: ", *shufflePtr)
 
 	tarotDeck := make(map[int]string)
-	if *deckPtr == "shadow" || *deckPtr == "Rider" {
+	if *deckPtr == "Shadow" || *deckPtr == "Rider" {
 		tarotDeck = map[int]string{
 
 			1:    "The Fool ",
@@ -423,11 +423,11 @@ func main() {
 			spreadCount = 1
 		case "Zodiac" :
 			spreadCount = deckSize
-		case "ellipse" :
+		case "Ellipse" :
 			spreadCount = 7
 		case "Mirror" :
 			spreadCount = 8
-		case "mandala" :
+		case "Mandala" :
 			spreadCount = 8
 		}
 
