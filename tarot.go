@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"time"
 	"math/rand"
 )
@@ -13,6 +14,7 @@ func getDeckSize(s string) int  {
 			return 78
 		case "Wildwood" :
 			return 78
+		default: { fmt.Println("invalid deck"); log.Fatal("Invalid deck specifier.") }
 		}
 	return 0
 }
@@ -371,7 +373,6 @@ func main() {
 }
 	
 	var deckSize = getDeckSize(*deckPtr)
-//	fmt.Println("getDeckSize", deckSize)
 	fmt.Println()
 
 
@@ -380,21 +381,20 @@ func main() {
 //integers, adds 1 to each to change the range to
 // 1-decksize, then for each int, randomly multiplies by
 // 100 or not. The int is then used to index as a
-// key into the appropriate map
+// key into the appropriate map. The mult by 100 will
+// indicated a random reversal of a card when reverse is set.
 
 	var list []int
 	rand.Seed(time.Now().UTC().UnixNano())
 	list = rand.Perm(deckSize)
 
-	var i = 0
-	for  i = 0; i < deckSize ; i++ {
-		list[i] = list[i] + 1
+	for  i := 0; i < deckSize ; i++ {
+		list[i] += 1
 		if *reversePtr {
 
 			if (rand.Intn(3 - 1)) == 1 {
 				list[i] = list[i] * 100
 			}
-
 			//add some deck cut logic and some keep ptr
 			//to dealt point
 			//so no new deal until cards gone.  Not
@@ -410,7 +410,7 @@ func main() {
 
 	
 
-	var spreadCount = 10
+	spreadCount := 10
 	
 	switch *spreadPtr {
 		case "FiveCard" :
@@ -446,6 +446,7 @@ func main() {
 		}
 	} 
 
+
 	if *spreadPtr == "Daily" {
 		spreadMeaning = map[int]string {
 			1:    "The querant's path for today",
@@ -466,7 +467,7 @@ func main() {
 	}
 
 	if  *spreadPtr == "Relationship" {
-
+//	if  *spreadPtr == "Rider" {
 		spreadMeaning = map[int]string {
 			1:   "The querant and the query",
 			2:   "How querant views the other",
@@ -478,14 +479,26 @@ func main() {
 			8:   "Synergistic outcome",
 			9:   "Desired outcome querant",
 			10:  "Desired outcome other",
-
 		}
 	}
+
 	
+//		spreadMeaning = map[int]string {
+//			1:   "The querant and the query",
+//			2:   "How querant views the other",
+//			3:   "How the parties view themselves",
+//			4:   "How the other fulfills the querant",
+//			5:   "How the other views the querant",
+//			6:   "Negative flows in the relationship",
+//			7:   "Positive flows in the relationship",
+//			8:   "Synergistic outcome",
+//			9:   "Desired outcome querant",
+//			10:  "Desired outcome other",
+//}
+
 	for  i := 0; i < spreadCount; i++ {
 		var j int
 		j = list[i]
-
 		fmt.Print(i + 1)
 		fmt.Print(": ")
 		fmt.Println(spreadMeaning[i+1])
